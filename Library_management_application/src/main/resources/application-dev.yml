@@ -1,0 +1,17 @@
+#----------- Custom Variable Configurations -------------------
+APPLICATION:
+  MAILING:
+    ACCOUNT:
+      ACTIVATION_URL: http://localhost:8080/api/v1/auth/activate-account
+      USERNAME: yash.11717121@gmail.com
+      PASSWORD: eeitxhcncxzsexkb
+  SECURITY:
+    JWT_EXPIRATION: 604800000
+    JWT_SECRET: 404E635266556A586E3272357538782J413FUCK8472B4B6250645367566B5978
+  DATABASE:
+    USERNAME: root
+    PASSWORD: Yash8146@
+    URL: jdbc:mysql://localhost:3306/lib_mng_sys
+  HIBERNATE:
+    SHOW_SQL: true
+    FORMAT_SQL: true
