@@ -8,6 +8,6 @@ import jakarta.mail.MessagingException;
 public interface AuthService {
 
     void registerUser(RegistrationDto user) throws MessagingException;
-    void activateAccount(String token);
+    void activateAccount(String token) throws MessagingException;
     AuthResponse login(AuthRequest authRequest);
 }

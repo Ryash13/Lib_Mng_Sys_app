@@ -18,10 +18,10 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${APPLICATION.SECURITY.JWT_SECRET}")
-    private static String SECRET_KEY;
+    private String SECRET_KEY;
 
     @Value("${APPLICATION.SECURITY.JWT_EXPIRATION}")
-    private static long EXPIRATION_DURATION;
+    private long EXPIRATION_DURATION;
 
     public String extractUsername(String token) {
         return extractClaims(token, Claims::getSubject);

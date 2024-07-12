@@ -2,12 +2,12 @@ package com.spring.project.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class NotFoundException extends RuntimeException {
+public class CustomException extends RuntimeException {
 
     private String message;
     private HttpStatus status;
 
-    public NotFoundException(String message, HttpStatus status) {
+    public CustomException(String message, HttpStatus status) {
         this.message = message;
         this.status = status;
     }

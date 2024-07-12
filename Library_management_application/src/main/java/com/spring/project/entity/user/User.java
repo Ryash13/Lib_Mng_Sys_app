@@ -1,37 +1,38 @@
 package com.spring.project.entity.user;
 
-import com.spring.project.entity.CommonAttributes;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "lib_mng_app_users")
-public class User extends CommonAttributes implements Principal, UserDetails {
+@EntityListeners(AuditingEntityListener.class)
+public class User implements Principal, UserDetails {
 
-    @NotNull(message = "Firstname cannot be blank or null")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private String firstname;
 
-    @NotNull(message = "Lastname cannot be blank or null")
     private String lastname;
 
     @Column(unique = true, nullable = false)
-    @NotNull(message = "Email cannot be blank or null")
-    @Email(message = "Enter a valid Email ID")
     private String email;
 
-    @Min(value = 6)
-    @Max(value = 16)
-    @NotNull(message = "Password cannot be blank or null")
+    @Column(nullable = false)
+    @Size(min = 8)
     private String password;
 
     @Column(unique = true, nullable = false, updatable = false)
@@ -43,6 +44,17 @@ public class User extends CommonAttributes implements Principal, UserDetails {
     private boolean enabled;
 
     @Column(columnDefinition = "boolean default false")
+    private boolean locked;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime lastModifiedDate;
+
+    @Column(columnDefinition = "boolean default false")
     private boolean logicallyDeleted;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
@@ -50,6 +62,14 @@ public class User extends CommonAttributes implements Principal, UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getFirstname() {
         return firstname;
@@ -107,6 +127,30 @@ public class User extends CommonAttributes implements Principal, UserDetails {
         this.logicallyDeleted = logicallyDeleted;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
     public Token getActivationToken() {
         return activationToken;
     }
@@ -130,7 +174,11 @@ public class User extends CommonAttributes implements Principal, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return roles
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .toList()
+                ;
     }
 
     @Override
@@ -150,7 +198,7 @@ public class User extends CommonAttributes implements Principal, UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked;
     }
 
     @Override

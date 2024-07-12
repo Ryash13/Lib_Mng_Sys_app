@@ -1,6 +1,6 @@
 package com.spring.project.dto;
 
-public record AuthResponse(String token, String displayName) {
+public record AuthResponse(String token, String displayName, String uuid) {
 
     @Override
     public String token() {
@@ -10,5 +10,10 @@ public record AuthResponse(String token, String displayName) {
     @Override
     public String displayName() {
         return displayName;
+    }
+
+    @Override
+    public String uuid() {
+        return uuid;
     }
 }

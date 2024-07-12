@@ -2,18 +2,20 @@ package com.spring.project.dto;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.sql.Date;
 
 public class RegistrationDto {
 
     @NotNull(message = "Firstname cannot be blank or null")
+    @NotEmpty(message = "Firstname cannot be blank or null")
     private String firstname;
 
     @NotNull(message = "Lastname cannot be blank or null")
+    @NotEmpty(message = "Lastname cannot be blank or null")
     private String lastname;
 
     @Column(unique = true, nullable = false)
@@ -21,9 +23,9 @@ public class RegistrationDto {
     @Email(message = "Enter a valid Email ID")
     private String email;
 
-    @Min(value = 6)
-    @Max(value = 16)
     @NotNull(message = "Password cannot be blank or null")
+    @NotEmpty(message = "Password cannot be blank or null")
+    @Size(min = 8, message = "Password must be greater than 8 characters")
     private String password;
 
     private Date dateOfBirth;
